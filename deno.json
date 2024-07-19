@@ -1,0 +1,10 @@
+{
+  "imports": {
+    "@hono/hono": "jsr:@hono/hono@^4.5.0",
+    "@std/fs": "jsr:@std/fs@^0.229.3",
+    "@std/jsonc": "jsr:@std/jsonc@^0.224.3",
+    "@std/path": "jsr:@std/path@^1.0.0",
+    "true-myth": "npm:true-myth@^7.4.0",
+    "zod": "npm:zod@^3.23.8"
+  }
+}
