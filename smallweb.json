@@ -1,8 +1,0 @@
-{
-    "permissions": {
-        "run": [
-            "smallweb",
-            "git"
-        ]
-    }
-}
