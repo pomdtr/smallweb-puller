@@ -7,15 +7,22 @@ import * as jsonc from "@std/jsonc";
 
 async function getAppDir(
     name: string,
-): Promise<Result<string, { reason: string }>> {
-    const command = new Deno.Command("smallweb", {
+): Promise<Result<string, Error>> {
+    const smallweb = Deno.env.get("SMALLWEB_EXEC_PATH");
+    if (!smallweb) {
+        return err(new Error("Smallweb executable path not found"));
+    }
+    const command = new Deno.Command(smallweb, {
         args: ["list", "--json"],
     });
 
-    const { stdout, success, stderr } = await command.output();
+    const { stdout, success, stderr, code } = await command.output();
 
     if (!success) {
-        return err({ reason: new TextDecoder().decode(stderr) });
+        const msg = `Smallweb command failed with code ${code}:\n${
+            new TextDecoder().decode(stderr)
+        }`;
+        return err(new Error(msg));
     }
 
     try {
@@ -26,12 +33,12 @@ async function getAppDir(
 
         const app = apps.find((app) => app.name === name);
         if (!app) {
-            return err({ reason: "App not found" });
+            return err(new Error(`App ${name} not found`));
         }
 
         return ok(app.dir);
     } catch (e) {
-        return err({ reason: e.message });
+        return err(e);
     }
 }
 
@@ -60,7 +67,7 @@ app.post(
         const res = await getAppDir(app);
         if (!res.isOk) {
             throw new HTTPException(400, {
-                message: res.error.reason,
+                message: res.error.message,
             });
         }
 
