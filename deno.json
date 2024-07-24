@@ -9,10 +9,7 @@
   },
   "smallweb": {
     "permissions": {
-      "run": [
-        "smallweb",
-        "git"
-      ]
+      "run": true
     }
   }
 }
